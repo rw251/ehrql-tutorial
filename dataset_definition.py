@@ -1,9 +1,10 @@
 from ehrql import case, codelist_from_csv, create_dataset, days, when
-from ehrql.tables.core import medications, patients
 from ehrql.tables.tpp import (
     addresses,
-    apcs,
     clinical_events,
+    apcs,
+    medications,
+    patients,
     practice_registrations,
 )
 
@@ -29,7 +30,7 @@ asthma_inhaler_codelist = codelist_from_csv(
 
 # population variables
 
-was_female_or_male = patients.sex.is_in(["female", "male"])
+is_female_or_male = patients.sex.is_in(["female", "male"])
 
 was_adult = (patients.age_on(index_date) >= 18) & (patients.age_on(index_date) <= 110)
 
@@ -39,7 +40,7 @@ was_alive = (
 
 was_registered = practice_registrations.for_patient_on(index_date).exists_for_patient()
 
-dataset.define_population(was_female_or_male & was_adult & was_alive & was_registered)
+dataset.define_population(is_female_or_male & was_adult & was_alive & was_registered)
 
 # demographic variables
 
